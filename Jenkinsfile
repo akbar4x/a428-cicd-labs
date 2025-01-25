@@ -21,12 +21,10 @@
 node {
     def dockerImage = 'node:16-buster-slim'
     def dockerArgs = '-p 3000:3000'
-
     docker.image(dockerImage).inside(dockerArgs) {
         stage('Build') {
             sh 'npm install'
         }
-
         stage('Test') {
             sh './jenkins/scripts/test.sh'
         }
