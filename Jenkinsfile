@@ -17,10 +17,16 @@ pipeline {
             }
         }
         stage('Deploy') { 
+            // steps {
+            //     sh './jenkins/scripts/deliver.sh' 
+            //     input message: 'Sudah selesai menggunakan React App? (Klik "Proceed" untuk mengakhiri)' 
+            //     sh './jenkins/scripts/kill.sh' 
+            // }
             steps {
-                // sh './jenkins/scripts/deliver.sh' 
-                input message: 'Sudah selesai menggunakan React App? (Klik "Proceed" untuk mengakhiri)' 
-                sh './jenkins/scripts/kill.sh' 
+                sh './jenkins/scripts/deliver.sh'
+                echo 'Menunggu selama 1 menit agar aplikasi dapat diuji...'
+                sh 'sleep 60'  // Jeda selama 1 menit sebelum aplikasi dihentikan
+                sh './jenkins/scripts/kill.sh'  // Mengakhiri aplikasi setelah 1 menit
             }
         }
     }
