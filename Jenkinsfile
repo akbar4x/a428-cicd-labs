@@ -16,12 +16,14 @@ pipeline {
                 sh './jenkins/scripts/test.sh'
             }
         }
+               stage('Manual Approval') {
+            steps {
+                script {
+                    input message: 'Lanjutkan ke tahap Deploy?', ok: 'Proceed'
+                }
+            }
+        }
         stage('Deploy') { 
-            // steps {
-            //     sh './jenkins/scripts/deliver.sh' 
-            //     input message: 'Sudah selesai menggunakan React App? (Klik "Proceed" untuk mengakhiri)' 
-            //     sh './jenkins/scripts/kill.sh' 
-            // }
             steps {
                 sh './jenkins/scripts/deliver.sh'
                 echo 'Menunggu selama 1 menit agar aplikasi dapat diuji...'
@@ -29,6 +31,13 @@ pipeline {
                 sh './jenkins/scripts/kill.sh'  // Mengakhiri aplikasi setelah 1 menit
             }
         }
+        // stage('Deploy') { 
+        //     steps {
+        //         sh './jenkins/scripts/deliver.sh' 
+        //         input message: 'Sudah selesai menggunakan React App? (Klik "Proceed" untuk mengakhiri)' 
+        //         sh './jenkins/scripts/kill.sh' 
+        //     }
+        // }
     }
 }
 // node {
