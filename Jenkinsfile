@@ -1,58 +1,54 @@
-// pipeline {
-//     agent {
-//         docker {
-//             image 'node:16-buster-slim'
-//             args '-p 3000:3000'
-//         }
-//     }
-//     stages {
+pipeline {
+    agent {
+        docker {
+            image 'node:16-buster-slim'
+            args '-p 3000:3000'
+        }
+    }
+    stages {
+        stage('Build') {
+            steps {
+                sh 'npm install'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh './jenkins/scripts/test.sh'
+            }
+        }
+               stage('Manual Approval') {
+            steps {
+                script {
+                    input message: 'Lanjutkan ke tahap Deploy?', ok: 'Proceed'
+                }
+            }
+        }
+        stage('Deploy') { 
+            steps {
+                sh './jenkins/scripts/deliver.sh'
+                sh 'sleep 60'
+                echo 'Pipeline has finished successfully.'
+                sh './jenkins/scripts/kill.sh'
+            }
+        }
+        // stage('Deploy') { 
+        //     steps {
+        //         sh './jenkins/scripts/deliver.sh' 
+        //         input message: 'Sudah selesai menggunakan React App? (Klik "Proceed" untuk mengakhiri)' 
+        //         sh './jenkins/scripts/kill.sh' 
+        //     }
+        // }
+    }
+}
+// node {
+//     def dockerImage = 'node:16-buster-slim'
+//     def dockerArgs = '-p 3000:3000'
+//     docker.image(dockerImage).inside(dockerArgs) {
 //         stage('Build') {
-//             steps {
-//                 sh 'npm install'
-//             }
+//             sh 'npm install'
 //         }
 //         stage('Test') {
-//             steps {
-//                 sh './jenkins/scripts/test.sh'
-//             }
-//         }
-//         stage('Manual Approval') {
-//             steps {
-//                 script {
-//                     input message: 'Lanjutkan ke tahap Deploy?', ok: 'Proceed'
-//                 }
-//             }
-//         }
-//         stage('Deploy') { 
-//             steps {
-//                 sh './jenkins/scripts/deliver.sh'
-//                 sh 'sleep 60'
-//                 echo 'Pipeline has finished successfully.'
-//                 sh './jenkins/scripts/kill.sh'
-//             }
+//             sh './jenkins/scripts/test.sh'
 //         }
 //     }
 // }
-
-node {
-    stage('Build') {
-        docker.image('node:16-buster-slim').inside('-p 3000:3000') {
-            sh 'npm install'
-        }
-    }
-    
-    stage('Test') {
-        sh './jenkins/scripts/test.sh'
-    }
-    
-    stage('Manual Approval') {
-        input message: 'Lanjutkan ke tahap Deploy?', ok: 'Proceed'
-    }
-    
-    stage('Deploy') {
-        sh './jenkins/scripts/deliver.sh'
-        sh 'sleep 60'
-        echo 'Pipeline has finished successfully.'
-        sh './jenkins/scripts/kill.sh'
-    }
-}
