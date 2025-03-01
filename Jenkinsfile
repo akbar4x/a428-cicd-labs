@@ -56,7 +56,7 @@ node {
 
         stage('Deploy') {
             sh './jenkins/scripts/deliver.sh'
-            sh 'sleep 10'
+            sh 'sleep 60'
             echo 'Pipeline has finished successfully.'
             sh './jenkins/scripts/kill.sh'
         }
