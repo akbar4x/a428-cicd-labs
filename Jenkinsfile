@@ -58,8 +58,8 @@ node {
     }    
     stage('Deploy') {
         sh './jenkins/scripts/deliver.sh'
-        sh 'sleep 160'
-        echo 'Pipeline has finished successfully.'
+        sh 'sleep 10'
         sh './jenkins/scripts/kill.sh'
+        echo 'Pipeline has finished successfully.'
     }
 }
