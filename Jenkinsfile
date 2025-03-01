@@ -37,12 +37,16 @@
 node {
     stage('Build') {
         steps {
-            sh 'npm install'
+            script {
+                sh 'npm install'
+            }
         }
     }
     stage('Test') {
         steps {
-            sh './jenkins/scripts/test.sh'
+            script {
+                sh './jenkins/scripts/test.sh'
+            }
         }
     }
     stage('Manual Approval') {
@@ -54,10 +58,12 @@ node {
     }
     stage('Deploy') { 
         steps {
-            sh './jenkins/scripts/deliver.sh'
-            sh 'sleep 60'
-            echo 'Pipeline has finished successfully.'
-            sh './jenkins/scripts/kill.sh'
+            script {
+                sh './jenkins/scripts/deliver.sh'
+                sh 'sleep 60'
+                echo 'Pipeline has finished successfully.'
+                sh './jenkins/scripts/kill.sh'
+            }
         }
     }
 }
