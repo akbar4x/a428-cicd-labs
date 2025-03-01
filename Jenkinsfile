@@ -38,28 +38,27 @@
 node {
     def dockerImage = 'node:16-buster-slim'
     def dockerArgs = '-p 3000:3000'
-    
-    stage('Build') {
-        docker.image(dockerImage).inside(dockerArgs) {
+
+    docker.image(dockerImage).inside(dockerArgs) {
+        stage('Build') {
             sh 'npm install'
         }
-    }
-    
-    stage('Test') {
-        docker.image(dockerImage).inside(dockerArgs) {
+
+        stage('Test') {
             sh './jenkins/scripts/test.sh'
         }
-    }
-    
-    stage('Manual Approval') {
-        script {
-            input message: 'Lanjutkan ke tahap Deploy?', ok: 'Proceed'
+
+        stage('Manual Approval') {
+            script {
+                input message: 'Lanjutkan ke tahap Deploy?', ok: 'Proceed'
+            }
         }
-    }    
-    stage('Deploy') {
-        sh './jenkins/scripts/deliver.sh'
-        sh 'sleep 10'
-        sh './jenkins/scripts/kill.sh'
-        echo 'Pipeline has finished successfully.'
+
+        stage('Deploy') {
+            sh './jenkins/scripts/deliver.sh'
+            sh 'sleep 60'
+            echo 'Pipeline has finished successfully.'
+            sh './jenkins/scripts/kill.sh'
+        }
     }
 }
