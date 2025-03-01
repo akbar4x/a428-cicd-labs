@@ -36,27 +36,23 @@
 
 node {
     stage('Build') {
-        script {
+        docker.image('node:16-buster-slim').inside('-p 3000:3000') {
             sh 'npm install'
         }
     }
+    
     stage('Test') {
-        script {
-            sh './jenkins/scripts/test.sh'
-        }
+        sh './jenkins/scripts/test.sh'
     }
+    
     stage('Manual Approval') {
-        script {
-            input message: 'Lanjutkan ke tahap Deploy?', ok: 'Proceed'
-        }
+        input message: 'Lanjutkan ke tahap Deploy?', ok: 'Proceed'
     }
-    stage('Deploy') { 
-        script {
-            sh './jenkins/scripts/deliver.sh'
-            sh 'sleep 60'
-            echo 'Pipeline has finished successfully.'
-            sh './jenkins/scripts/kill.sh'
-        }
+    
+    stage('Deploy') {
+        sh './jenkins/scripts/deliver.sh'
+        sh 'sleep 60'
+        echo 'Pipeline has finished successfully.'
+        sh './jenkins/scripts/kill.sh'
     }
 }
-
