@@ -26,9 +26,9 @@ pipeline {
         stage('Deploy') { 
             steps {
                 sh './jenkins/scripts/deliver.sh'
-                echo 'Menunggu selama 1 menit agar aplikasi dapat diuji...'
-                sh 'sleep 60'  // Jeda selama 1 menit sebelum aplikasi dihentikan
-                sh './jenkins/scripts/kill.sh'  // Mengakhiri aplikasi setelah 1 menit
+                sh 'sleep 60'
+                echo 'Pipeline has finished successfully.'
+                sh './jenkins/scripts/kill.sh'
             }
         }
         // stage('Deploy') { 
@@ -40,15 +40,3 @@ pipeline {
         // }
     }
 }
-// node {
-//     def dockerImage = 'node:16-buster-slim'
-//     def dockerArgs = '-p 3000:3000'
-//     docker.image(dockerImage).inside(dockerArgs) {
-//         stage('Build') {
-//             sh 'npm install'
-//         }
-//         stage('Test') {
-//             sh './jenkins/scripts/test.sh'
-//         }
-//     }
-// }
