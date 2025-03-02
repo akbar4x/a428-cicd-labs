@@ -62,9 +62,7 @@ node {
                 '''
                     withCredentials([sshUserPrivateKey(credentialsId: 'ssh-key-ec2', keyFileVariable: 'SSH_KEY')]) {
                         sh '''
-                        ssh -o StrictHostKeyChecking=no -i ${SSH_KEY} ubuntu@13.229.209.37 << EOF
-                            echo "Login ke server berhasil!"
-                        EOF
+                        scp -r -o StrictHostKeyChecking=no -i ${SSH_KEY} /build ubuntu@13.229.209.37:/home/ubuntu
                         '''
                         }
             // sh 'sleep 60'
