@@ -56,6 +56,10 @@ node {
 
         stage('Deploy') {
             sh './jenkins/scripts/deliver.sh'
+                sh '''
+                apt update && apt install -y openssh-client
+                ssh -V  # Verifikasi instalasi SSH client
+                '''
                     withCredentials([sshUserPrivateKey(credentialsId: 'ssh-key-ec2', keyFileVariable: 'SSH_KEY')]) {
                         sh '''
                         ssh -o StrictHostKeyChecking=no -i ${SSH_KEY} ubuntu@13.229.209.37 << EOF
@@ -63,7 +67,7 @@ node {
                         EOF
                         '''
                         }
-            sh 'sleep 10'
+            // sh 'sleep 60'
             echo 'Pipeline has finished successfully.'
             sh './jenkins/scripts/kill.sh'
         }
