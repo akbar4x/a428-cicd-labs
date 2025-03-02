@@ -56,6 +56,13 @@ node {
 
         stage('Deploy') {
             sh './jenkins/scripts/deliver.sh'
+                    withCredentials([sshUserPrivateKey(credentialsId: 'ssh-key-ec2', keyFileVariable: 'SSH_KEY')]) {
+                        sh '''
+                        ssh -o StrictHostKeyChecking=no -i ${$SSH_KEY} ubuntu@13.229.209.37 << EOF
+                            echo "Login ke server berhasil!"
+                        EOF
+                        '''
+                    }
             sh 'sleep 60'
             echo 'Pipeline has finished successfully.'
             sh './jenkins/scripts/kill.sh'
