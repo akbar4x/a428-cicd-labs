@@ -62,7 +62,7 @@ node {
                             echo "Login ke server berhasil!"
                         EOF
                         '''
-                    }
+                        }
             sh 'sleep 60'
             echo 'Pipeline has finished successfully.'
             sh './jenkins/scripts/kill.sh'
