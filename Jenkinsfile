@@ -66,7 +66,7 @@ node {
                         scp -r -o StrictHostKeyChecking=no -i ${SSH_KEY} build ubuntu@13.229.209.37:/home/ubuntu
                         '''
                         }
-            // sh 'sleep 60'
+            sh 'sleep 60'
             echo 'Pipeline has finished successfully.'
             sh './jenkins/scripts/kill.sh'
         }
