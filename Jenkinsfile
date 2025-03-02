@@ -56,14 +56,14 @@ node {
 
         stage('Deploy') {
             sh './jenkins/scripts/deliver.sh'
-                // sh '''
-                // apt update && apt install -y openssh-client
-                // ssh -V  # Verifikasi instalasi SSH client
-                // '''
+                sh '''
+                apt update && apt install -y openssh-client
+                ssh -V  # Verifikasi instalasi SSH client
+                '''
                 sh 'pwd && ls -la'
                     withCredentials([sshUserPrivateKey(credentialsId: 'ssh-key-ec2', keyFileVariable: 'SSH_KEY')]) {
                         sh '''
-                        scp -r -o StrictHostKeyChecking=no -i ${SSH_KEY} /build ubuntu@13.229.209.37:/home/ubuntu
+                        scp -r -o StrictHostKeyChecking=no -i ${SSH_KEY} build ubuntu@13.229.209.37:/home/ubuntu
                         '''
                         }
             // sh 'sleep 60'
